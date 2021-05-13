@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Main.gd" type="Script" id=1]
+[ext_resource path="res://addons/godot_ovrmobile/example_scenes/left_hand_model.glb" type="PackedScene" id=2]
+[ext_resource path="res://addons/godot_ovrmobile/example_scenes/oculus_hand_tracker.gd" type="Script" id=3]
+[ext_resource path="res://addons/godot_ovrmobile/example_scenes/hand_pointer.tscn" type="PackedScene" id=4]
+[ext_resource path="res://addons/godot_ovrmobile/example_scenes/right_hand_model.glb" type="PackedScene" id=5]
+
+[node name="Main" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="ARVROrigin" type="ARVROrigin" parent="."]
+
+[node name="ARVRCamera" type="ARVRCamera" parent="ARVROrigin"]
+
+[node name="LeftHand" type="ARVRController" parent="ARVROrigin"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.26317, 0, 0 )
+script = ExtResource( 3 )
+
+[node name="HandModel" parent="ARVROrigin/LeftHand" instance=ExtResource( 2 )]
+
+[node name="HandPointer" parent="ARVROrigin/LeftHand/HandModel" instance=ExtResource( 4 )]
+visible = false
+
+[node name="RightHand" type="ARVRController" parent="ARVROrigin"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.254799, 0, 0 )
+controller_id = 2
+script = ExtResource( 3 )
+
+[node name="HandModel" parent="ARVROrigin/RightHand" instance=ExtResource( 5 )]
+
+[node name="HandPointer" parent="ARVROrigin/RightHand/HandModel" instance=ExtResource( 4 )]
+visible = false
+
+[node name="Objects" type="Spatial" parent="ARVROrigin"]
