@@ -11,8 +11,10 @@ onready var objects = get_node("ARVROrigin/Objects")
 var leftHand: OculusHandTracker = null
 var rightHand: OculusHandTracker = null
 
-var leftHandLoaded = false
-var rightHandLoaded = false
+var leftHandLoaded = 0
+var leftHandReady = false
+var rightHandLoaded = 0
+var rightHandReady = false
 
 func _ready():
 	var interface = ARVRServer.find_interface("OVRMobile")
@@ -32,10 +34,24 @@ func _process(_delta):
 	updateHands(_delta)
 
 func updateHands(delta):
-	if detectGesture(leftHand, 00011):
+	if detectGesture(leftHand, 11111):
+		leftHandLoaded += 1
+		leftHandLoaded = min(leftHandLoaded, 5)
+	if detectGesture(leftHand, 00011) && leftHandLoaded > 0 && !leftHandReady:
+		leftHandLoaded -= 1
+		leftHandReady = true
+	if detectGesture(leftHand, 00010) && leftHandReady:
+		leftHandReady = false
 		spawnBullet(leftHand, leftHand.transform.basis.x)
 	
-	if detectGesture(rightHand, 00011):
+	if detectGesture(rightHand, 11111):
+		rightHandLoaded += 1
+		rightHandLoaded = min(rightHandLoaded, 5)
+	if detectGesture(rightHand, 00011) && rightHandLoaded > 0 && !rightHandReady:
+		rightHandLoaded -= 1
+		rightHandReady = true
+	if detectGesture(rightHand, 00010) && rightHandReady:
+		rightHandReady = false
 		spawnBullet(rightHand, rightHand.transform.basis.x * -1)
 
 func detectGesture(hand: OculusHandTracker, gesture: int):
@@ -51,4 +67,4 @@ func spawnBullet(hand: OculusHandTracker, forward: Vector3):
 	
 	var model = hand.get_child(0)
 	bullet.transform = model.global_transform
-	bullet.apply_central_impulse(forward * 3.0)
+	bullet.apply_central_impulse(forward * 10.0)
