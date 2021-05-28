@@ -33,28 +33,22 @@ func _process(_delta):
 
 func updateHands(delta):
 	if detectGesture(leftHand, 00011):
-		leftHandLoaded = true
-	elif leftHandLoaded && detectGesture(leftHand, 00010):
-		spawnBullet(leftHand)
-		leftHandLoaded = false
-		
+		spawnBullet(leftHand, leftHand.transform.basis.x)
+	
 	if detectGesture(rightHand, 00011):
-		rightHandLoaded = true
-	elif rightHandLoaded && detectGesture(rightHand, 00010):
-		spawnBullet(rightHand)
-		rightHandLoaded = false
+		spawnBullet(rightHand, rightHand.transform.basis.x * -1)
 
 func detectGesture(hand: OculusHandTracker, gesture: int):
 	var result = 0;
 	for i in range(0,5):
 		var finger_state = hand.get_finger_state_estimate(i);
-		result |= finger_state << i;
+		result += pow(10,i) * finger_state;
 	return result == gesture
 
-func spawnBullet(hand: OculusHandTracker):
+func spawnBullet(hand: OculusHandTracker, forward: Vector3):
 	var bullet: RigidBody = bullet_template.duplicate()
 	objects.add_child(bullet)
 	
 	var model = hand.get_child(0)
 	bullet.transform = model.global_transform
-	bullet.apply_central_impulse(bullet.transform.basis.z * 2.0)
+	bullet.apply_central_impulse(forward * 3.0)
