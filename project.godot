@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "RigidBody",
+"class": "Bullet",
+"language": "GDScript",
+"path": "res://Bullet.gd"
+}, {
 "base": "OculusTracker",
 "class": "OculusHandTracker",
 "language": "GDScript",
@@ -23,11 +28,18 @@ _global_script_classes=[ {
 "class": "OculusTracker",
 "language": "GDScript",
 "path": "res://addons/godot_ovrmobile/example_scenes/oculus_tracker.gd"
+}, {
+"base": "RigidBody",
+"class": "Target",
+"language": "GDScript",
+"path": "res://Target.gd"
 } ]
 _global_script_class_icons={
+"Bullet": "",
 "OculusHandTracker": "",
 "OculusTouchController": "",
-"OculusTracker": ""
+"OculusTracker": "",
+"Target": ""
 }
 
 [application]

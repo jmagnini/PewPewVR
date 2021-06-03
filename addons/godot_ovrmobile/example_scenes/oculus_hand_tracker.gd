@@ -226,6 +226,10 @@ enum SimpleFingerState {
 # It is a bit unprecise on the thumb and pinky but overall is enough for very simple
 # gesture detection; it uses the accumulated angle of the 3 bones in each finger
 func get_finger_state_estimate(finger):
+	var confidence = ovr_hand_tracking.get_hand_pose(controller_id, _vrapi_bone_orientations);
+	if confidence <= 0.0:
+		return 0;
+	
 	var angle = 0.0;
 	angle += _get_bone_angle_diff(_ovrHandFingers_Bone1Start[finger]+0);
 	angle += _get_bone_angle_diff(_ovrHandFingers_Bone1Start[finger]+1);
